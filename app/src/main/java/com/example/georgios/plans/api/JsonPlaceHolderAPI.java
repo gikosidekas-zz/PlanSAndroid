@@ -1,5 +1,6 @@
 package com.example.georgios.plans.api;
 
+import com.example.georgios.plans.model.NumberString;
 import com.example.georgios.plans.model.PreferenciaEntity;
 import com.example.georgios.plans.model.Token;
 import com.example.georgios.plans.model.UsuarioEntity;
@@ -28,5 +29,8 @@ public interface JsonPlaceHolderAPI {
 
     @GET("plan/plans/preferences")
     Call<List<PreferenciaEntity>> getPreferences();
+
+    @POST("user/users/userPreferences")
+    Call<NumberString> setUserPreferences(@Body List<NumberString> ns);
 
 }

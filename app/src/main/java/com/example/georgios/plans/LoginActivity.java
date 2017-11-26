@@ -81,6 +81,7 @@ public class LoginActivity extends AppCompatActivity implements Callback<Token>{
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),RegisterUserActivity.class);
+                finish();
                 startActivity(i);
             }
         });

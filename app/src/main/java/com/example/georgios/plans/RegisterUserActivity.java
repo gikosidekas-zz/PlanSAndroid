@@ -16,9 +16,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.georgios.plans.api.PlanSApiAdapter;
+import com.example.georgios.plans.model.NumberString;
 import com.example.georgios.plans.model.PreferenciaEntity;
 import com.example.georgios.plans.model.UsuarioEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -37,6 +39,7 @@ public class RegisterUserActivity extends AppCompatActivity implements Callback<
     private AutoCompleteTextView mNumberidView;
     private View mProgressView;
     private View mLoginFormView;
+    private List<NumberString> preferencias = new ArrayList<NumberString>();
 
 
 
@@ -162,6 +165,13 @@ public class RegisterUserActivity extends AppCompatActivity implements Callback<
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+        finish();
+        startActivity(i);
+    }
+
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         return email.contains("@");
@@ -215,6 +225,13 @@ public class RegisterUserActivity extends AppCompatActivity implements Callback<
 
     }
 
+    private void callSetPreferencesApi(List<NumberString> ns){
+
+        Call<NumberString> call = PlanSApiAdapter.getApiService().setUserPreferences(ns);
+        call.enqueue(new setPreferencesCallBack());
+
+    }
+
     @Override
     public void onResponse(Call<UsuarioEntity> call, Response<UsuarioEntity> response) {
         //a@amAuthTask = null;
@@ -222,9 +239,10 @@ public class RegisterUserActivity extends AppCompatActivity implements Callback<
 
         if(response.isSuccessful()){
             UsuarioEntity ur = response.body();
-            Intent i = new Intent(getApplicationContext(),LoginActivity.class);
-            finish();
-            startActivity(i);
+            for(int i=0;i<this.preferencias.size();i++){
+                this.preferencias.get(i).setNumber(ur.getIdUsuario());
+            }
+            callSetPreferencesApi(this.preferencias);
         }
         else{
             System.out.println(response.errorBody());
@@ -244,8 +262,34 @@ public class RegisterUserActivity extends AppCompatActivity implements Callback<
 
     }
 
-    public void addToList(String str){
+    public void addToList(long num, String str){
+        NumberString ns = new NumberString();
+        ns.setNumber(num);
+        ns.setStr(str);
+        this.preferencias.add(ns);
+    }
 
+    public void deleteList(long num, String str){
+        NumberString ns = new NumberString();
+        ns.setNumber(num);
+        ns.setStr(str);
+        this.preferencias.remove(ns);
+    }
+
+    class setPreferencesCallBack implements  Callback<NumberString>{
+
+
+        @Override
+        public void onResponse(Call<NumberString> call, Response<NumberString> response) {
+            Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+            finish();
+            startActivity(i);
+        }
+
+        @Override
+        public void onFailure(Call<NumberString> call, Throwable t) {
+            t.printStackTrace();
+        }
     }
 
     class PreferencesCallBack implements  Callback<List<PreferenciaEntity>>{
@@ -265,8 +309,12 @@ public class RegisterUserActivity extends AppCompatActivity implements Callback<
 
                         @Override
                         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            Toast.makeText(getApplicationContext(),pe.get(finalI).getNombre(),Toast.LENGTH_LONG);
-                            System.out.println(pe.get(finalI).getNombre());
+                            if(b){
+                                addToList(pe.get(finalI).getIdPreferencia(),pe.get(finalI).getNombre());
+                            }
+                            else{
+                                deleteList(pe.get(finalI).getIdPreferencia(),pe.get(finalI).getNombre());
+                            }
                         }
                     });
 
