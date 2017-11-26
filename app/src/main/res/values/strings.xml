@@ -34,4 +34,7 @@
     <string name="register_button_submit">Registrar</string>
     <string name="error_confirm_password">Las contraseñas no coinciden</string>
 
+    <!--Main Planes Recomendados-->
+    <string name="Main_Label">Planes Recomendados</string>
+
 </resources>

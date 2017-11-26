@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent">
+
+<TextView
+    android:id="@+id/planName"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:text="Name"
+    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+    />
+
+<TextView
+    android:id="@+id/planLocation"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:text="Ubicacion:"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@id/planName"
+     />
+
+<TextView
+    android:id="@+id/planDate"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:text="Fecha:"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@id/planLocation"
+    />
+
+<TextView
+    android:id="@+id/planCost"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:text="Costo:"
+    android:layout_alignParentLeft="true"
+    android:layout_below="@id/planDate"
+    />
+
+</RelativeLayout>
