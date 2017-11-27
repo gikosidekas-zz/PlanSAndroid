@@ -33,6 +33,7 @@
     <string name="register_Label">Registrar nuevo usuario</string>
     <string name="register_button_submit">Registrar</string>
     <string name="error_confirm_password">Las contraseñas no coinciden</string>
+    <string name="edituser_button_submit">Finalizar Edición</string>
 
     <!--Main Planes Recomendados-->
     <string name="Main_Label">Planes Recomendados</string>
@@ -46,5 +47,6 @@
     <string name="plan_costo">Costo Promedio</string>
     <string name="plan_creador">Creador del Plan</string>
     <string name="plan_asistentes">Asistentes</string>
+    <string name="title_activity_edit_user">EditUserActivity</string>
 
 </resources>

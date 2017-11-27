@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.georgios.plans.api.PlanSApiAdapter;
 import com.example.georgios.plans.model.GlobalClass;
@@ -125,7 +124,7 @@ public class MainActivity extends AppCompatActivity
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         globalVariable.setPlan(lpe.get(i));
 
-                        Intent intent = new Intent(getApplicationContext(),PlanSubscribe.class);
+                        Intent intent = new Intent(getApplicationContext(),PlanSubscribeActivity.class);
                         startActivity(intent);
 
                     }
@@ -155,6 +154,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_recommended_plans) {
 
         } else if (id == R.id.nav_edit_profile) {
+
+            Intent i = new Intent(getApplicationContext(),EditUserActivity.class);
+            startActivity(i);
 
         } else if (id == R.id.nav_log_out) {
 

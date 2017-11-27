@@ -68,7 +68,7 @@ public class CustomAdapterPlan extends ArrayAdapter<PlanEntity> {
 
         location.setText("Ubicacion: "+auxStr);
 
-        String str = getDateCurrentTimeZone(singlePlan.getFechaInicio());
+        String str = getDateCurrentTimeZone(singlePlan.getFechaInicio().getTime());
         date.setText("Fecha: "+str);
 
         cost.setText("Costo: "+Integer.toString(singlePlan.getCostoPromedio()));
@@ -134,10 +134,5 @@ public class CustomAdapterPlan extends ArrayAdapter<PlanEntity> {
             }
         }
         return hour;
-
-
-
-
-
     }
 }

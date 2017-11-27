@@ -27,7 +27,11 @@
             android:label="@string/title_activity_login"
             android:noHistory="true" />
         <activity android:name=".RegisterUserActivity" />
-        <activity android:name=".PlanSubscribe"></activity>
+        <activity android:name=".PlanSubscribeActivity" />
+        <activity
+            android:name=".EditUserActivity"
+            android:label="@string/title_activity_edit_user"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
