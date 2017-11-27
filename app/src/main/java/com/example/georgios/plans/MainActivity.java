@@ -2,9 +2,6 @@ package com.example.georgios.plans;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,13 +18,10 @@ import android.widget.Toast;
 
 import com.example.georgios.plans.api.PlanSApiAdapter;
 import com.example.georgios.plans.model.GlobalClass;
-import com.example.georgios.plans.model.NumberString;
 import com.example.georgios.plans.model.PlanEntity;
-import com.example.georgios.plans.Custom.CustomAdapter;
-import com.example.georgios.plans.model.PreferenciaEntity;
+import com.example.georgios.plans.Custom.CustomAdapterPlan;
 import com.example.georgios.plans.model.UsuarioEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -55,7 +49,9 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        final GlobalClass globalVariable = new GlobalClass();
+
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+        globalVariable.setUser(new UsuarioEntity());
     }
 
     @Override
@@ -110,11 +106,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
-    }
-
-    @Override
     public void onResponse(Call<List<PlanEntity>> call, Response<List<PlanEntity>> response) {
 
         //conversion lista a array
@@ -122,7 +113,9 @@ public class MainActivity extends AppCompatActivity
         PlanEntity[] lpea= new PlanEntity[lpe.size()];
         lpea = lpe.toArray(lpea);
 
-        ListAdapter adapt = new CustomAdapter(this,lpea);
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+
+        ListAdapter adapt = new CustomAdapterPlan(this,lpea);
         ListView listview = (ListView) findViewById(R.id.listViewRecommended);
         listview.setAdapter(adapt);
 
@@ -130,7 +123,11 @@ public class MainActivity extends AppCompatActivity
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Toast.makeText(MainActivity.this,lpe.get(i).getNombre(),Toast.LENGTH_LONG).show();
+                        globalVariable.setPlan(lpe.get(i));
+
+                        Intent intent = new Intent(getApplicationContext(),PlanSubscribe.class);
+                        startActivity(intent);
+
                     }
                 }
 
@@ -143,5 +140,35 @@ public class MainActivity extends AppCompatActivity
         t.printStackTrace();
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_create_plan) {
+            // Handle the camera action
+        } else if (id == R.id.nav_my_plans) {
+
+        } else if (id == R.id.nav_subscribed_plans) {
+
+        } else if (id == R.id.nav_recommended_plans) {
+
+        } else if (id == R.id.nav_edit_profile) {
+
+        } else if (id == R.id.nav_log_out) {
+
+            final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+            globalVariable.setUser(new UsuarioEntity());
+
+            Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+            startActivity(i);
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
 }

@@ -37,4 +37,14 @@
     <!--Main Planes Recomendados-->
     <string name="Main_Label">Planes Recomendados</string>
 
+    <!--Plan Description-->
+    <string name="plan_descripcion">Descripción</string>
+    <string name="plan_suscribirse">Suscribete</string>
+    <string name="plan_ubicacion">Ubicación</string>
+    <string name="plan_fecha_ini">Fecha Inicio</string>
+    <string name="plan_fecha_fin">Fecha Final</string>
+    <string name="plan_costo">Costo Promedio</string>
+    <string name="plan_creador">Creador del Plan</string>
+    <string name="plan_asistentes">Asistentes</string>
+
 </resources>

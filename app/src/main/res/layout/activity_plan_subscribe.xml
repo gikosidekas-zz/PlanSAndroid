@@ -1,0 +1,149 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.georgios.plans.LoginActivity">
+
+
+    <ScrollView
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/planDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/plan_descripcion"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                />
+            <TextView
+                android:id="@+id/planDescriptionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="text Description"
+                />
+
+            <TextView
+                android:id="@+id/planUbicacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/plan_ubicacion"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                />
+            <TextView
+                android:id="@+id/planUbicacionText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="text Description"
+                />
+
+            <TextView
+                android:id="@+id/planFechaInicio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/plan_fecha_ini"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                />
+            <TextView
+                android:id="@+id/planFechaInicioText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="text Description"
+                />
+
+            <TextView
+                android:id="@+id/planFechaFinal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/plan_fecha_fin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                />
+            <TextView
+                android:id="@+id/planFechaFinalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="text Description"
+                />
+
+            <TextView
+                android:id="@+id/planCosto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/plan_costo"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                />
+            <TextView
+                android:id="@+id/planCostoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="text Description"
+                />
+
+            <TextView
+                android:id="@+id/planCreador"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/plan_creador"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                />
+            <TextView
+                android:id="@+id/planCreadorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="text Description"
+                />
+
+
+
+            <Button
+                android:id="@+id/register_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/plan_suscribirse"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/planAsistentes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/plan_asistentes"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                />
+
+        </LinearLayout>
+
+
+
+
+    </ScrollView>
+</LinearLayout>
+
+

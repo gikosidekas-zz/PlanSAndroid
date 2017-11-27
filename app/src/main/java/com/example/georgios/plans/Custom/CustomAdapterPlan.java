@@ -28,12 +28,12 @@ import java.util.TimeZone;
  * Created by IkosidekasDesktop on 26/11/2017.
  */
 
-public class CustomAdapter extends ArrayAdapter<PlanEntity> {
+public class CustomAdapterPlan extends ArrayAdapter<PlanEntity> {
 
     private PlanEntity[] pe;
     private Context context;
 
-    public CustomAdapter(@NonNull Context context, PlanEntity[] resource) {
+    public CustomAdapterPlan(@NonNull Context context, PlanEntity[] resource) {
         super(context, R.layout.custom_row ,resource);
         pe = resource;
     }
@@ -81,13 +81,63 @@ public class CustomAdapter extends ArrayAdapter<PlanEntity> {
         try{
             Calendar calendar = Calendar.getInstance();
             TimeZone tz = TimeZone.getDefault();
-            calendar.setTimeInMillis(timestamp * 1000);
+            calendar.setTimeInMillis(timestamp);
             calendar.add(Calendar.MILLISECOND, tz.getOffset(calendar.getTimeInMillis()));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date currenTimeZone = (Date) calendar.getTime();
-            return sdf.format(currenTimeZone);
+            return makeNewDate(sdf.format(currenTimeZone));
         }catch (Exception e) {
         }
         return "";
+    }
+
+    public String makeNewDate(String str){
+        String date;
+        String time;
+        String[] parts;
+
+        parts=str.split(" ");
+
+        date = parts[0];
+        time = parts[1];
+
+        parts= date.split("-");
+        date=parts[2]+"/"+parts[1]+"/"+parts[0];
+
+        parts= time.split(":");
+        time = parts[0]+":"+parts[1];
+
+        time = convertTimeAMPM(time);
+
+        str=date+" "+time;
+        return str;
+    }
+
+    public String convertTimeAMPM(String hour){
+        String[] parts;
+        int hora;
+
+        parts=hour.split(":");
+
+        hora = Integer.parseInt(parts[0]);
+
+        if(hora<=11 || hora>=0){
+            hour = Integer.toString(hora)+":"+parts[1]+" AM";
+        }
+        else{
+            if(hora==12){
+                hour = parts[0]+":"+parts[1]+" PM";
+            }
+            else{
+                hora = hora - 12;
+                hour = Integer.toString(hora)+":"+parts[1]+" PM";
+            }
+        }
+        return hour;
+
+
+
+
+
     }
 }
