@@ -57,4 +57,16 @@ public interface JsonPlaceHolderAPI {
     @POST("user/users/update")
     Call<UsuarioEntity> updateUser(@Body UsuarioEntity ur);
 
+    @GET("plan/plans/{id}")
+    Call<List<PlanEntity>> getUserCreatedPlans(@Path("id") long id);
+
+    @GET("plan/plans/subscribelist/{id}")
+    Call<List<PlanEntity>> getUserSubscribedPlans(@Path("id") long id);
+
+    @POST("plan/plans/unsubscribe")
+    Call<NumberPair> unsubscribePlan(@Body NumberPair np);
+
+    @POST("plan/plans")
+    Call<PlanEntity> createPlan(@Body PlanEntity plan);
+
 }

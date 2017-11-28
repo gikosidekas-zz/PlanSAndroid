@@ -37,10 +37,14 @@
 
     <!--Main Planes Recomendados-->
     <string name="Main_Label">Planes Recomendados</string>
+    <string name="Search_Label">Planes Encontrados</string>
+    <string name="YourPlans_Label">Planes Creados Por Ti</string>
+    <string name="Subscribed_Label">Planes Suscritos</string>
 
     <!--Plan Description-->
     <string name="plan_descripcion">Descripción</string>
     <string name="plan_suscribirse">Suscribete</string>
+    <string name="plan_unsubscribe">Desuscribete</string>
     <string name="plan_ubicacion">Ubicación</string>
     <string name="plan_fecha_ini">Fecha Inicio</string>
     <string name="plan_fecha_fin">Fecha Final</string>
@@ -48,5 +52,18 @@
     <string name="plan_creador">Creador del Plan</string>
     <string name="plan_asistentes">Asistentes</string>
     <string name="title_activity_edit_user">EditUserActivity</string>
+    <string name="search_title">Buscar Plan</string>
+    <string name="search_hint">Buscar Plan</string>
+
+    <!--Create Plan-->
+    <string name="createplan_nombre">Nombre</string>
+    <string name="createplan_descripcion">Descripción</string>
+    <string name="createplan_ubicacion">Ubicacion</string>
+    <string name="createplan_fechaini">Fecha Inicio</string>
+    <string name="createplan_fechafin">Fecha Finalización</string>
+    <string name="createplan_costo">Costo Promedio</string>
+    <string name="createplan_preferencia">Preferencia Plan</string>
+    <string name="createplan_button">Crear Plan</string>
+
 
 </resources>

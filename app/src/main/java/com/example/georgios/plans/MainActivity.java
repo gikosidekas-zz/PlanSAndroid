@@ -1,7 +1,10 @@
 package com.example.georgios.plans;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.example.georgios.plans.api.PlanSApiAdapter;
 import com.example.georgios.plans.model.GlobalClass;
@@ -78,7 +82,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 
@@ -90,12 +101,13 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.search) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 
     private void callRecomendPlansApi(UsuarioEntity ue){
 
@@ -148,10 +160,12 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_create_plan) {
             // Handle the camera action
         } else if (id == R.id.nav_my_plans) {
-
+            Intent i = new Intent(getApplicationContext(),YourPlansActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_subscribed_plans) {
 
-        } else if (id == R.id.nav_recommended_plans) {
+            Intent i = new Intent(getApplicationContext(),SubscribedPlansActivity.class);
+            startActivity(i);
 
         } else if (id == R.id.nav_edit_profile) {
 
