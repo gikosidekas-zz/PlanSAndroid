@@ -68,8 +68,8 @@ public class CustomAdapterPlan extends ArrayAdapter<PlanEntity> {
 
         location.setText("Ubicacion: "+auxStr);
 
-        String str = getDateCurrentTimeZone(singlePlan.getFechaInicio().getTime());
-        date.setText("Fecha: "+str);
+        String str = singlePlan.getFechaInicio();
+        date.setText("Fecha: "+makeNewDate(str));
 
         cost.setText("Costo: "+Long.toString(singlePlan.getCostoPromedio()));
 
@@ -96,7 +96,7 @@ public class CustomAdapterPlan extends ArrayAdapter<PlanEntity> {
         String time;
         String[] parts;
 
-        parts=str.split(" ");
+        parts=str.split("T");
 
         date = parts[0];
         time = parts[1];
@@ -121,12 +121,15 @@ public class CustomAdapterPlan extends ArrayAdapter<PlanEntity> {
 
         hora = Integer.parseInt(parts[0]);
 
-        if(hora<=11 || hora>=0){
+        if(hora<=11 && hora>0){
             hour = Integer.toString(hora)+":"+parts[1]+" AM";
         }
         else{
             if(hora==12){
                 hour = parts[0]+":"+parts[1]+" PM";
+            }
+            else if(hora == 0){
+                hour = 12+":"+parts[1]+" AM";
             }
             else{
                 hora = hora - 12;

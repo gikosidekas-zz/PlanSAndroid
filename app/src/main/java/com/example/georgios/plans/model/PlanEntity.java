@@ -15,8 +15,8 @@ public class PlanEntity {
     private String nombre;
     private String descripcion;
     private String ubicacion;
-    private Timestamp fechaInicio;
-    private Timestamp fechaFinal;
+    private String fechaInicio;
+    private String fechaFinal;
     private long costoPromedio;
     private long creadorPlan;
     private long detallePreferencia;
@@ -62,19 +62,19 @@ public class PlanEntity {
         return ubicacion;
     }
 
-    public Timestamp getFechaInicio() {
+    public String getFechaInicio() {
         return fechaInicio;
     }
 
-    public Timestamp getFechaFinal() {
+    public String getFechaFinal() {
         return fechaFinal;
     }
 
-    public void setFechaInicio(Timestamp fechaInicio) {
+    public void setFechaInicio(String fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public void setFechaFinal(Timestamp fechaFinal) {
+    public void setFechaFinal(String fechaFinal) {
         this.fechaFinal = fechaFinal;
     }
 

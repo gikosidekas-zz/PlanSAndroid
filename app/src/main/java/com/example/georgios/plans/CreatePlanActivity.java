@@ -247,6 +247,9 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
 
         PlanEntity plan = new PlanEntity();
 
+        String datePost;
+
+
         mNameView.setError(null);
         mDescriptionView.setError(null);
         mUbicacionView.setError(null);
@@ -258,8 +261,16 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
         plan.setCreadorPlan((int)globalVariable.getUser().getIdUsuario());
         plan.setDescripcion(mDescriptionView.getText().toString());
         plan.setDetallePreferencia(getPreferenciaSpiner(preferenciaSpinner.getSelectedItem().toString()));
-        plan.setFechaFinal(new Timestamp(fechafin.getTime()));
-        plan.setFechaInicio(new Timestamp(fechaini.getTime()));
+
+        Timestamp ts = new Timestamp(fechafin.getTime());
+        datePost = changeFormat(ts.toString());
+        plan.setFechaFinal(datePost);
+
+
+        ts=new Timestamp(fechaini.getTime());
+        datePost = changeFormat(ts.toString());
+        plan.setFechaInicio(datePost);
+
         plan.setNombre(mNameView.getText().toString());
         plan.setUbicacion(mUbicacionView.getText().toString());
 
@@ -335,20 +346,6 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
 
     }
 
-    public void addToList(long num, String str){
-        NumberString ns = new NumberString();
-        ns.setNumber(num);
-        ns.setStr(str);
-        this.preferencias.add(ns);
-    }
-
-    public void deleteList(long num, String str){
-        NumberString ns = new NumberString();
-        ns.setNumber(num);
-        ns.setStr(str);
-        this.preferencias.remove(ns);
-    }
-
     public long getPreferenciaSpiner(String str){
 
         long pos=-1;
@@ -408,19 +405,9 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
     }
 
     public String changeFormat(String date){
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:MM");
-        Date testDate = null;
-        try {
-            testDate = sdf.parse(date);
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
-        String newFormat = formatter.format(testDate);
-        System.out.println(".....Date..."+newFormat);
+        String[] parts = date.split(" ");
+        String newFormat = parts[0]+"T"+parts[1];
         return newFormat;
-
     }
 
 

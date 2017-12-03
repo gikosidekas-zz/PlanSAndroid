@@ -64,8 +64,8 @@ public class PlanSubscribeActivity extends AppCompatActivity {
         mplanDescriptionText.setText(globalVariable.getPlan().getDescripcion());
         mplanUbicacionText.setText(globalVariable.getPlan().getUbicacion().split("\\|")[0]);
 
-        mplanFechaInicioText.setText(getDateCurrentTimeZone(globalVariable.getPlan().getFechaInicio().getTime()));
-        mplanFechaFinalText.setText(getDateCurrentTimeZone(globalVariable.getPlan().getFechaFinal().getTime()));
+        mplanFechaInicioText.setText(makeNewDate(globalVariable.getPlan().getFechaInicio()));
+        mplanFechaFinalText.setText(makeNewDate(globalVariable.getPlan().getFechaFinal()));
         mplanCostoText.setText(String.valueOf(globalVariable.getPlan().getCostoPromedio()));
 
         Button mEmailSignInButton = (Button) findViewById(R.id.subscribe_button);
@@ -108,7 +108,7 @@ public class PlanSubscribeActivity extends AppCompatActivity {
         String time;
         String[] parts;
 
-        parts=str.split(" ");
+        parts=str.split("T");
 
         date = parts[0];
         time = parts[1];
@@ -133,12 +133,15 @@ public class PlanSubscribeActivity extends AppCompatActivity {
 
         hora = Integer.parseInt(parts[0]);
 
-        if(hora<=11 || hora>=0){
+        if(hora<=11 && hora>0){
             hour = Integer.toString(hora)+":"+parts[1]+" AM";
         }
         else{
             if(hora==12){
                 hour = parts[0]+":"+parts[1]+" PM";
+            }
+            else if(hora == 0){
+                hour = 12+":"+parts[1]+" AM";
             }
             else{
                 hora = hora - 12;
