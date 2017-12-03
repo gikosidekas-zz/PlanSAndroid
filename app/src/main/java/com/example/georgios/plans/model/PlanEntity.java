@@ -17,9 +17,9 @@ public class PlanEntity {
     private String ubicacion;
     private Timestamp fechaInicio;
     private Timestamp fechaFinal;
-    private int costoPromedio;
-    private int creadorPlan;
-    private int detallePreferencia;
+    private long costoPromedio;
+    private long creadorPlan;
+    private long detallePreferencia;
     private Blob imagenPlan;
 
     public long getIdPlan() {
@@ -32,6 +32,30 @@ public class PlanEntity {
 
     public String getDescripcion() {
         return descripcion;
+    }
+
+    public long getCostoPromedio() {
+        return costoPromedio;
+    }
+
+    public long getCreadorPlan() {
+        return creadorPlan;
+    }
+
+    public long getDetallePreferencia() {
+        return detallePreferencia;
+    }
+
+    public void setCostoPromedio(long costoPromedio) {
+        this.costoPromedio = costoPromedio;
+    }
+
+    public void setCreadorPlan(long creadorPlan) {
+        this.creadorPlan = creadorPlan;
+    }
+
+    public void setDetallePreferencia(long detallePreferencia) {
+        this.detallePreferencia = detallePreferencia;
     }
 
     public String getUbicacion() {
@@ -52,18 +76,6 @@ public class PlanEntity {
 
     public void setFechaFinal(Timestamp fechaFinal) {
         this.fechaFinal = fechaFinal;
-    }
-
-    public int getCostoPromedio() {
-        return costoPromedio;
-    }
-
-    public int getCreadorPlan() {
-        return creadorPlan;
-    }
-
-    public int getDetallePreferencia() {
-        return detallePreferencia;
     }
 
     public Blob getImagenPlan() {

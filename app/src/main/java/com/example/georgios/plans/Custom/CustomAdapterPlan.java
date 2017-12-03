@@ -71,7 +71,7 @@ public class CustomAdapterPlan extends ArrayAdapter<PlanEntity> {
         String str = getDateCurrentTimeZone(singlePlan.getFechaInicio().getTime());
         date.setText("Fecha: "+str);
 
-        cost.setText("Costo: "+Integer.toString(singlePlan.getCostoPromedio()));
+        cost.setText("Costo: "+Long.toString(singlePlan.getCostoPromedio()));
 
         return customView;
 

@@ -10,7 +10,10 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -69,36 +72,6 @@
                 android:layout_height="wrap_content">
 
                 <AutoCompleteTextView
-                    android:id="@+id/fechaini"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/createplan_fechaini"
-                    android:inputType="datetime"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <AutoCompleteTextView
-                    android:id="@+id/fechafin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/createplan_fechafin"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <AutoCompleteTextView
                     android:id="@+id/costo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -109,10 +82,83 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <LinearLayout
+                android:id="@+id/fecha_ini_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/fechaini"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/createplan_fechaini"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:clickable="false"/>
+
+                <TextView
+                    android:id="@+id/fecha_ini_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/fechaini"
+                    android:layout_weight="1"
+                    android:text="Definir fecha de inicio"
+                    android:clickable="false"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/fecha_ini_text"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:clickable="false"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fecha_fin_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/fechafin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/createplan_fechafin"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:clickable="false"/>
+
+                <TextView
+                    android:id="@+id/fecha_fin_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/fechaini"
+                    android:layout_weight="1"
+                    android:text="Definir fecha de finalización"
+                    android:clickable="false"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/fecha_fin_text"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:clickable="false"/>
+            </LinearLayout>
+
             <Spinner
                 android:id="@+id/preferencia"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
+                android:textSize="20sp"
 
                 />
 

@@ -65,5 +65,11 @@
     <string name="createplan_preferencia">Preferencia Plan</string>
     <string name="createplan_button">Crear Plan</string>
 
+    <!--Date time pickers-->
+    <string name="switch_datetime_picker_name">Switch DateTime Picker</string>
+    <string name="open_datetime_dialog">Open DateTime Dialog</string>
+    <string name="open_datetime_dialog_with_neutral_button">Open DateTime Dialog with Neutral Button</string>
+    <string name="clean">Clean</string>
+
 
 </resources>

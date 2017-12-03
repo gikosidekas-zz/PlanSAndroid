@@ -158,7 +158,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_create_plan) {
-            // Handle the camera action
+            Intent i = new Intent(getApplicationContext(),CreatePlanActivity.class);
+            startActivity(i);
         } else if (id == R.id.nav_my_plans) {
             Intent i = new Intent(getApplicationContext(),YourPlansActivity.class);
             startActivity(i);
