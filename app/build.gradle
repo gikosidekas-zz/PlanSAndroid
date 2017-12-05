@@ -36,5 +36,7 @@ dependencies {
 
     compile 'com.github.Kunzisoft:Android-SwitchDateTimePicker:1.8'
 
+    compile 'com.google.android.gms:play-services-places:9.2.0'
+
 
 }

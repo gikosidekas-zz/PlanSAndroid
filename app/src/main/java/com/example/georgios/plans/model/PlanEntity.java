@@ -113,4 +113,6 @@ public class PlanEntity {
     public void setImagenPlan(Blob imagenPlan) {
         this.imagenPlan = imagenPlan;
     }
+
+
 }

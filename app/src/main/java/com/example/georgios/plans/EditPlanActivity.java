@@ -1,21 +1,15 @@
 package com.example.georgios.plans;
 
 import android.content.Intent;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,13 +20,12 @@ import com.example.georgios.plans.model.GlobalClass;
 import com.example.georgios.plans.model.NumberString;
 import com.example.georgios.plans.model.PlanEntity;
 import com.example.georgios.plans.model.PreferenciaEntity;
-import com.example.georgios.plans.model.UsuarioEntity;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,9 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.sql.Timestamp;
-
-public class CreatePlanActivity extends AppCompatActivity implements Callback<PlanEntity> {
+public class EditPlanActivity extends AppCompatActivity implements Callback<PlanEntity> {
 
     private Spinner preferenciaSpinner;
     private AutoCompleteTextView mDescriptionView;
@@ -81,18 +72,18 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_plan);
+        setContentView(R.layout.activity_edit_plan);
 
-        if(getSupportActionBar()!=null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            setTitle("Crear Nuevo Plan");
+            setTitle("Edita tu Plan");
         }
 
         textViewIni = (TextView) findViewById(R.id.fecha_ini_text);
         textViewFin = (TextView) findViewById(R.id.fecha_fin_text);
 
-        preferenciaSpinner = (Spinner)findViewById(R.id.preferencia);
+        preferenciaSpinner = (Spinner) findViewById(R.id.preferencia);
 
         mNameView = (AutoCompleteTextView) findViewById(R.id.nombre);
         mDescriptionView = (AutoCompleteTextView) findViewById(R.id.descripcion);
@@ -115,7 +106,7 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
         //Date time picker INI
         // Construct SwitchDateTimePicker
         dateTimeFragment = (SwitchDateTimeDialogFragment) getSupportFragmentManager().findFragmentByTag(TAG_DATETIME_FRAGMENT_INI);
-        if(dateTimeFragment == null) {
+        if (dateTimeFragment == null) {
             dateTimeFragment = SwitchDateTimeDialogFragment.newInstance(
                     getString(R.string.label_datetime_dialog),
                     getString(android.R.string.ok),
@@ -129,8 +120,8 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
         // Assign unmodifiable values
         dateTimeFragment.set24HoursMode(false);
         List<String> time = getTimeNowPices();
-        dateTimeFragment.setMinimumDateTime(new GregorianCalendar(Integer.parseInt(time.get(0)),Integer.parseInt(time.get(1))-1,Integer.parseInt(time.get(2))).getTime());
-        dateTimeFragment.setMaximumDateTime(new GregorianCalendar(Integer.parseInt(time.get(0))+1,Integer.parseInt(time.get(1))-1,Integer.parseInt(time.get(2))).getTime());
+        dateTimeFragment.setMinimumDateTime(new GregorianCalendar(Integer.parseInt(time.get(0)), Integer.parseInt(time.get(1)) - 1, Integer.parseInt(time.get(2))).getTime());
+        dateTimeFragment.setMaximumDateTime(new GregorianCalendar(Integer.parseInt(time.get(0)) + 1, Integer.parseInt(time.get(1)) - 1, Integer.parseInt(time.get(2))).getTime());
 
         // Define new day and month format
         try {
@@ -144,9 +135,9 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
         dateTimeFragment.setOnButtonClickListener(new SwitchDateTimeDialogFragment.OnButtonWithNeutralClickListener() {
             @Override
             public void onPositiveButtonClick(Date date) {
-                Timestamp ts= new Timestamp(date.getTime());
+                Timestamp ts = new Timestamp(date.getTime());
                 textViewIni.setText(makeNewDate(ts.toString()));
-                fechaini=date;
+                fechaini = date;
             }
 
             @Override
@@ -164,7 +155,7 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
         //Date time picker FIN
         // Construct SwitchDateTimePicker
         dateTimeFragmentFin = (SwitchDateTimeDialogFragment) getSupportFragmentManager().findFragmentByTag(TAG_DATETIME_FRAGMENT_FIN);
-        if(dateTimeFragmentFin == null) {
+        if (dateTimeFragmentFin == null) {
             dateTimeFragmentFin = SwitchDateTimeDialogFragment.newInstance(
                     getString(R.string.label_datetime_dialog),
                     getString(android.R.string.ok),
@@ -175,8 +166,8 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
 
         // Assign unmodifiable values
         dateTimeFragmentFin.set24HoursMode(false);
-        dateTimeFragmentFin.setMinimumDateTime(new GregorianCalendar(Integer.parseInt(time.get(0)),Integer.parseInt(time.get(1))-1,Integer.parseInt(time.get(2))).getTime());
-        dateTimeFragmentFin.setMaximumDateTime(new GregorianCalendar(Integer.parseInt(time.get(0))+1,Integer.parseInt(time.get(1))-1,Integer.parseInt(time.get(2))).getTime());
+        dateTimeFragmentFin.setMinimumDateTime(new GregorianCalendar(Integer.parseInt(time.get(0)), Integer.parseInt(time.get(1)) - 1, Integer.parseInt(time.get(2))).getTime());
+        dateTimeFragmentFin.setMaximumDateTime(new GregorianCalendar(Integer.parseInt(time.get(0)) + 1, Integer.parseInt(time.get(1)) - 1, Integer.parseInt(time.get(2))).getTime());
 
         // Define new day and month format
         try {
@@ -190,9 +181,9 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
         dateTimeFragmentFin.setOnButtonClickListener(new SwitchDateTimeDialogFragment.OnButtonWithNeutralClickListener() {
             @Override
             public void onPositiveButtonClick(Date date) {
-                Timestamp ts= new Timestamp(date.getTime());
+                Timestamp ts = new Timestamp(date.getTime());
                 textViewFin.setText(makeNewDate(ts.toString()));
-                fechafin=date;
+                fechafin = date;
             }
 
             @Override
@@ -207,35 +198,49 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
             }
         });
 
-        LinearLayout fechaini = (LinearLayout)findViewById(R.id.fecha_ini_layout);
+        LinearLayout fechaini = (LinearLayout) findViewById(R.id.fecha_ini_layout);
         fechaini.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dateTimeFragment.startAtCalendarView();
-                List<String> strtime=getTimeNowPices();
-                dateTimeFragment.setDefaultDateTime(new GregorianCalendar(Integer.parseInt(strtime.get(0)),Integer.parseInt(strtime.get(1))-1,Integer.parseInt(strtime.get(2)),Integer.parseInt(strtime.get(3)),Integer.parseInt(strtime.get(4))).getTime());
+                List<String> strtime = getTimeNowPices();
+                dateTimeFragment.setDefaultDateTime(new GregorianCalendar(Integer.parseInt(strtime.get(0)), Integer.parseInt(strtime.get(1)) - 1, Integer.parseInt(strtime.get(2)), Integer.parseInt(strtime.get(3)), Integer.parseInt(strtime.get(4))).getTime());
                 dateTimeFragment.show(getSupportFragmentManager(), TAG_DATETIME_FRAGMENT_INI);
             }
         });
 
-        LinearLayout fechafin = (LinearLayout)findViewById(R.id.fecha_fin_layout);
+        LinearLayout fechafin = (LinearLayout) findViewById(R.id.fecha_fin_layout);
         fechafin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dateTimeFragmentFin.startAtCalendarView();
-                List<String> strtime=getTimeNowPices();
-                dateTimeFragmentFin.setDefaultDateTime(new GregorianCalendar(Integer.parseInt(strtime.get(0)),Integer.parseInt(strtime.get(1))-1,Integer.parseInt(strtime.get(2)),Integer.parseInt(strtime.get(3)),Integer.parseInt(strtime.get(4))).getTime());
+                List<String> strtime = getTimeNowPices();
+                dateTimeFragmentFin.setDefaultDateTime(new GregorianCalendar(Integer.parseInt(strtime.get(0)), Integer.parseInt(strtime.get(1)) - 1, Integer.parseInt(strtime.get(2)), Integer.parseInt(strtime.get(3)), Integer.parseInt(strtime.get(4))).getTime());
                 dateTimeFragmentFin.show(getSupportFragmentManager(), TAG_DATETIME_FRAGMENT_FIN);
             }
         });
 
-        LinearLayout ubicacion = (LinearLayout)findViewById(R.id.ubicacion_layout);
+        LinearLayout ubicacion = (LinearLayout) findViewById(R.id.ubicacion_layout);
         ubicacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startPlacePickerActivity();
             }
         });
+
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+
+        textViewIni.setText(makeDateFromT(globalVariable.getPlan().getFechaInicio()));
+        textViewFin.setText(makeDateFromT(globalVariable.getPlan().getFechaFinal()));
+
+        mNameView.setText(globalVariable.getPlan().getNombre());
+        mDescriptionView.setText(globalVariable.getPlan().getDescripcion());
+
+        mCostoView.setText(""+globalVariable.getPlan().getCostoPromedio());
+
+        TextView enterCurrentLocation = (TextView) findViewById(R.id.ubicacion_text);
+        enterCurrentLocation.setText(getAddressPlan(globalVariable.getPlan().getUbicacion()));
+
     }
 
     private void startPlacePickerActivity() {
@@ -248,6 +253,12 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String getAddressPlan(String str){
+        String[] parts = str.split("\\|");
+        str = parts[0];
+        return str;
     }
 
     private void displaySelectedPlaceFromPlacePicker(Intent data) {
@@ -303,17 +314,29 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
         // Store values at the time of the login attempt.
         plan.setCostoPromedio(Integer.parseInt(mCostoView.getText().toString()));
         plan.setCreadorPlan((int)globalVariable.getUser().getIdUsuario());
+        plan.setIdPlan(globalVariable.getPlan().getIdPlan());
         plan.setDescripcion(mDescriptionView.getText().toString());
         plan.setDetallePreferencia(getPreferenciaSpiner(preferenciaSpinner.getSelectedItem().toString()));
 
-        Timestamp ts = new Timestamp(fechafin.getTime());
-        datePost = changeFormat(ts.toString());
-        plan.setFechaFinal(datePost);
+        Timestamp ts;
 
+        if(fechafin!=null){
+            ts = new Timestamp(fechafin.getTime());
+            datePost = changeFormat(ts.toString());
+            plan.setFechaFinal(datePost);
+        }
+        else{
+            plan.setFechaFinal(globalVariable.getPlan().getFechaFinal());
+        }
 
-        ts=new Timestamp(fechaini.getTime());
-        datePost = changeFormat(ts.toString());
-        plan.setFechaInicio(datePost);
+        if(fechaini!=null){
+            ts=new Timestamp(fechaini.getTime());
+            datePost = changeFormat(ts.toString());
+            plan.setFechaInicio(datePost);
+        }
+        else{
+            plan.setFechaInicio(globalVariable.getPlan().getFechaInicio());
+        }
 
         plan.setNombre(mNameView.getText().toString());
         plan.setUbicacion(globalVariable.getPlan().getUbicacion());
@@ -360,7 +383,7 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
 
     private void callRegisterApi(PlanEntity ur){
 
-        Call<PlanEntity> call = PlanSApiAdapter.getApiService().createPlan(ur);
+        Call<PlanEntity> call = PlanSApiAdapter.getApiService().editPlan(ur);
         call.enqueue(this);
 
     }
@@ -402,13 +425,17 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
 
     }
 
-    class PreferencesCallBack implements  Callback<List<PreferenciaEntity>> {
+    class PreferencesCallBack implements Callback<List<PreferenciaEntity>> {
 
 
         @Override
         public void onResponse(Call<List<PreferenciaEntity>> call, Response<List<PreferenciaEntity>> response) {
 
+            final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+
             lpe = response.body();
+
+            String defaultpref = lpe.get((int) globalVariable.getPlan().getDetallePreferencia()-1).getNombre();
 
             List<String> str = new ArrayList<String>();
 
@@ -418,6 +445,10 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
 
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.preference_category, str);
             preferenciaSpinner.setAdapter(dataAdapter);
+
+            int spinnerPosition = dataAdapter.getPosition(defaultpref);
+
+            preferenciaSpinner.setSelection(spinnerPosition);
         }
 
         @Override
@@ -476,6 +507,28 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
         return str;
     }
 
+    public String makeDateFromT(String str){
+        String date;
+        String time;
+        String[] parts;
+
+        parts=str.split("T");
+
+        date = parts[0];
+        time = parts[1];
+
+        parts= date.split("-");
+        date=parts[2]+"/"+parts[1]+"/"+parts[0];
+
+        parts= time.split(":");
+        time = parts[0]+":"+parts[1];
+
+        time = convertTimeAMPM(time);
+
+        str=date+" "+time;
+        return str;
+    }
+
     public String convertTimeAMPM(String hour){
         String[] parts;
         int hora;
@@ -501,7 +554,4 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
         }
         return hour;
     }
-
-
-
 }

@@ -33,6 +33,11 @@ public class SubscribedPlansActivity extends AppCompatActivity implements Callba
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             setTitle("Planes Suscritos");
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         callYourCreatedPlansApi();
     }

@@ -69,4 +69,12 @@ public interface JsonPlaceHolderAPI {
     @POST("plan/plans")
     Call<PlanEntity> createPlan(@Body PlanEntity plan);
 
+    @POST("plan/plans/update")
+    Call<PlanEntity> editPlan(@Body PlanEntity plan);
+
+    @GET("plan/plans/search/{planname}/{iduser}")
+    Call<List<PlanEntity>> searchPlan(@Path("planname") String planname, @Path("iduser") long id);
+
+
+
 }

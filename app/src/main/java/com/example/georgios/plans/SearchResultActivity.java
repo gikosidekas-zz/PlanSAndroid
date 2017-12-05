@@ -13,7 +13,6 @@ import com.example.georgios.plans.Custom.CustomAdapterPlan;
 import com.example.georgios.plans.api.PlanSApiAdapter;
 import com.example.georgios.plans.model.GlobalClass;
 import com.example.georgios.plans.model.PlanEntity;
-import com.example.georgios.plans.model.UsuarioEntity;
 
 import java.util.List;
 
@@ -21,25 +20,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class YourPlansActivity extends AppCompatActivity implements Callback<List<PlanEntity>> {
+public class SearchResultActivity extends AppCompatActivity implements Callback<List<PlanEntity>> {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_your_plans);
+        setContentView(R.layout.activity_search_result);
 
         //Back Arrow in actionBar
         if(getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            setTitle("Tus Planes Creados");
+            setTitle("Planes Suscritos");
         }
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         callYourCreatedPlansApi();
     }
 
@@ -56,7 +50,7 @@ public class YourPlansActivity extends AppCompatActivity implements Callback<Lis
 
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
 
-        Call<List<PlanEntity>> call = PlanSApiAdapter.getApiService().getUserCreatedPlans(globalVariable.getUser().getIdUsuario());
+        Call<List<PlanEntity>> call = PlanSApiAdapter.getApiService().searchPlan(globalVariable.getPlan().getNombre(),globalVariable.getUser().getIdUsuario());
         call.enqueue(this);
 
     }
@@ -81,7 +75,8 @@ public class YourPlansActivity extends AppCompatActivity implements Callback<Lis
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         globalVariable.setPlan(lpe.get(i));
 
-                        Intent intent = new Intent(getApplicationContext(),EditReviewPlanActivity.class);
+                        Intent intent = new Intent(getApplicationContext(),PlanSubscribeActivity.class);
+                        finish();
                         startActivity(intent);
 
                     }

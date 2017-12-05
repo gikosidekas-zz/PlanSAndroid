@@ -54,6 +54,7 @@
     <string name="title_activity_edit_user">EditUserActivity</string>
     <string name="search_title">Buscar Plan</string>
     <string name="search_hint">Buscar Plan</string>
+    <string name="button_plan_edit">Editar Plan</string>
 
     <!--Create Plan-->
     <string name="createplan_nombre">Nombre</string>
@@ -64,6 +65,9 @@
     <string name="createplan_costo">Costo Promedio</string>
     <string name="createplan_preferencia">Preferencia Plan</string>
     <string name="createplan_button">Crear Plan</string>
+    <string name="ubicacion">Ubicación</string>
+    <string name="createplan_preferences">Preferencia de tu plan</string>
+
 
     <!--Date time pickers-->
     <string name="switch_datetime_picker_name">Switch DateTime Picker</string>

@@ -1,17 +1,16 @@
 package com.example.georgios.plans;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import com.example.georgios.plans.Custom.CustomAdapterPlan;
 import com.example.georgios.plans.Custom.CustomAdapterUsuario;
 import com.example.georgios.plans.api.PlanSApiAdapter;
 import com.example.georgios.plans.model.GlobalClass;
@@ -28,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PlanSubscribeActivity extends AppCompatActivity {
+public class EditReviewPlanActivity extends AppCompatActivity {
 
     private TextView mplanDescriptionText;
     private TextView mplanUbicacionText;
@@ -37,11 +36,10 @@ public class PlanSubscribeActivity extends AppCompatActivity {
     private TextView mplanCostoText;
     private TextView mplanCreadorText;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plan_subscribe);
+        setContentView(R.layout.activity_edit_review_plan);
 
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
 
@@ -72,12 +70,13 @@ public class PlanSubscribeActivity extends AppCompatActivity {
         mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                callSubscribeApi(globalVariable.getPlan().getIdPlan(), globalVariable.getUser().getIdUsuario());
+                Intent intent = new Intent(getApplicationContext(),EditPlanActivity.class);
+                finish();
+                startActivity(intent);
             }
         });
 
         callAsistentesPlanApi(globalVariable.getPlan().getIdPlan());
-
     }
 
     //For the arrow back button to function.
@@ -102,8 +101,6 @@ public class PlanSubscribeActivity extends AppCompatActivity {
         }
         return "";
     }
-
-
 
     public String makeNewDate(String str){
         String date;
@@ -244,6 +241,4 @@ public class PlanSubscribeActivity extends AppCompatActivity {
             t.printStackTrace();
         }
     }
-
-
 }
