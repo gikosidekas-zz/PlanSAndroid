@@ -12,7 +12,7 @@
     <string name="prompt_password">Contraseña</string>
     <string name="action_sign_in">Ingresar</string>
     <string name="action_sign_in_short">Ingresar</string>
-    <string name="error_invalid_email">El Usuario no existe</string>
+    <string name="error_invalid_email">El email no es valido</string>
     <string name="error_invalid_password">La contraseña es invalida</string>
     <string name="error_incorrect_password">Contraseña y/o email invalidos</string>
     <string name="error_field_required">Este campo es obligatorio</string>
@@ -34,6 +34,8 @@
     <string name="register_button_submit">Registrar</string>
     <string name="error_confirm_password">Las contraseñas no coinciden</string>
     <string name="edituser_button_submit">Finalizar Edición</string>
+    <string name="create_preferencias">Tus Preferencias</string>
+    <string name="create_tipoid">Tipo Identificación</string>
 
     <!--Main Planes Recomendados-->
     <string name="Main_Label">Planes Recomendados</string>
@@ -67,6 +69,7 @@
     <string name="createplan_button">Crear Plan</string>
     <string name="ubicacion">Ubicación</string>
     <string name="createplan_preferences">Preferencia de tu plan</string>
+    <string name="editplan_button">Editar plan</string>
 
 
     <!--Date time pickers-->

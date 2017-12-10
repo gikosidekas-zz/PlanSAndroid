@@ -24,8 +24,18 @@
             android:textSize="25dp" />
     </LinearLayout>
 
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/login_progress_reguser"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        android:layout_gravity = "center"/>
+
     <ScrollView
-        android:id="@+id/login_form"
+        android:id="@+id/login_form_reguser"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -46,7 +56,8 @@
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textStyle="bold"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -64,7 +75,8 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textStyle="bold"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -82,7 +94,8 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textStyle="bold"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -98,7 +111,8 @@
                     android:hint="@string/register_username"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textStyle="bold"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -113,7 +127,8 @@
                     android:hint="@string/register_name"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textStyle="bold"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -128,9 +143,20 @@
                     android:hint="@string/register_secondname"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textStyle="bold"/>
 
             </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tipoid_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/create_tipoid"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:clickable="false"
+                android:textStyle="bold"/>
 
             <Spinner
                 android:id="@+id/tipoid"
@@ -148,11 +174,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/register_numeroid"
-                    android:inputType="text"
+                    android:inputType="number"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textStyle="bold"/>
 
             </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/pref_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/create_preferencias"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:clickable="false"
+                android:textStyle="bold"/>
 
 
             <LinearLayout

@@ -9,7 +9,7 @@
     tools:showIn="@layout/app_bar_main">
 
         <LinearLayout
-            android:id="@+id/email_login_form"
+            android:id="@+id/email_login_form_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -21,6 +21,15 @@
                 android:gravity="center"
                 android:textSize="25dp" />
 
+            <!-- Login progress -->
+            <ProgressBar
+                android:id="@+id/login_progress_main"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone"
+                android:layout_gravity = "center"/>
 
             <ListView
                 android:id="@+id/listViewRecommended"
@@ -30,5 +39,6 @@
             </ListView>
 
         </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>

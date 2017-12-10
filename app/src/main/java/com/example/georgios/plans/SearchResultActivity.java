@@ -1,6 +1,10 @@
 package com.example.georgios.plans;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -8,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.georgios.plans.Custom.CustomAdapterPlan;
 import com.example.georgios.plans.api.PlanSApiAdapter;
@@ -27,14 +32,17 @@ public class SearchResultActivity extends AppCompatActivity implements Callback<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
 
+        final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
+
         //Back Arrow in actionBar
         if(getSupportActionBar()!=null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            setTitle("Planes Suscritos");
+            setTitle(globalVariable.getPlan().getNombre());
         }
 
         callYourCreatedPlansApi();
+        showProgress(true);
     }
 
     //For the arrow back button to function.
@@ -66,7 +74,7 @@ public class SearchResultActivity extends AppCompatActivity implements Callback<
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
 
         ListAdapter adapt = new CustomAdapterPlan(this,lpea);
-        ListView listview = (ListView) findViewById(R.id.listViewRecommended);
+        ListView listview = (ListView) findViewById(R.id.listViewRecommended_search);
         listview.setAdapter(adapt);
 
         listview.setOnItemClickListener(
@@ -84,10 +92,56 @@ public class SearchResultActivity extends AppCompatActivity implements Callback<
 
         );
 
+        showProgress(false);
+
     }
 
     @Override
     public void onFailure(Call<List<PlanEntity>> call, Throwable t) {
+        showProgress(false);
+        Toast.makeText(getApplicationContext(), "Ha ocurrido un error inesperado en el servidor",Toast.LENGTH_LONG).show();
         t.printStackTrace();
+    }
+
+    private View mProgressView;
+    private View mLoginFormView;
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+
+        mLoginFormView = findViewById(R.id.listViewRecommended_search);
+        mProgressView = findViewById(R.id.login_progress_search);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
     }
 }

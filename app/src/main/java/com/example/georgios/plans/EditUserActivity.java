@@ -1,6 +1,10 @@
 package com.example.georgios.plans;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -42,8 +46,6 @@ public class EditUserActivity extends AppCompatActivity implements Callback<Usua
     private AutoCompleteTextView mNameView;
     private AutoCompleteTextView mSecondnameView;
     private AutoCompleteTextView mNumberidView;
-    private View mProgressView;
-    private View mLoginFormView;
     private List<NumberString> preferencias = new ArrayList<NumberString>();
     private List<PreferenciaEntity> preferencesUser = new ArrayList<PreferenciaEntity>();
 
@@ -142,18 +144,7 @@ public class EditUserActivity extends AppCompatActivity implements Callback<Usua
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(ur.getContrasena()) && !isPasswordValid(ur.getContrasena())) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        } else if(ur.getContrasena().compareTo(confirmPass) != 0){
-            mConfirmPassView.setError(getString(R.string.error_confirm_password));
-            focusView = mConfirmPassView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(ur.getUsuario())) {
+        if (TextUtils.isEmpty(ur.getEmail())) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
@@ -161,27 +152,27 @@ public class EditUserActivity extends AppCompatActivity implements Callback<Usua
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
-        }
-
-        if (TextUtils.isEmpty(ur.getUsuario())) {
+        } else if (TextUtils.isEmpty(ur.getContrasena()) && !isPasswordValid(ur.getContrasena())) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        } else if(ur.getContrasena().compareTo(confirmPass) != 0){
+            mConfirmPassView.setError(getString(R.string.error_confirm_password));
+            focusView = mConfirmPassView;
+            cancel = true;
+        } else if (TextUtils.isEmpty(ur.getUsuario())) {
             mUsernameView.setError(getString(R.string.error_field_required));
             focusView = mUsernameView;
             cancel = true;
-        }
-
-        if (TextUtils.isEmpty(ur.getNombres())) {
+        } else if (TextUtils.isEmpty(ur.getNombres())) {
             mNameView.setError(getString(R.string.error_field_required));
             focusView = mNameView;
             cancel = true;
-        }
-
-        if (TextUtils.isEmpty(ur.getApellidos())) {
+        } else if (TextUtils.isEmpty(ur.getApellidos())) {
             mSecondnameView.setError(getString(R.string.error_field_required));
             focusView = mSecondnameView;
             cancel = true;
-        }
-
-        if (TextUtils.isEmpty(ur.getNumeroId())) {
+        } else if (TextUtils.isEmpty(ur.getNumeroId())) {
             mNumberidView.setError(getString(R.string.error_field_required));
             focusView = mNumberidView;
             cancel = true;
@@ -194,7 +185,7 @@ public class EditUserActivity extends AppCompatActivity implements Callback<Usua
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            //showProgress(true);
+            showProgress(true);
             callRegisterApi(ur);
             //mAuthTask = new UserLoginTask(email, password);
 
@@ -298,11 +289,14 @@ public class EditUserActivity extends AppCompatActivity implements Callback<Usua
 
         @Override
         public void onResponse(Call<NumberString> call, Response<NumberString> response) {
+            showProgress(false);
             finish();
         }
 
         @Override
         public void onFailure(Call<NumberString> call, Throwable t) {
+            showProgress(false);
+            Toast.makeText(getApplicationContext(), "Ha ocurrido un error inesperado en el servidor",Toast.LENGTH_LONG).show();
             t.printStackTrace();
         }
     }
@@ -369,6 +363,48 @@ public class EditUserActivity extends AppCompatActivity implements Callback<Usua
         @Override
         public void onFailure(Call<List<PreferenciaEntity>> call, Throwable t) {
             t.printStackTrace();
+        }
+    }
+
+    private View mProgressView;
+    private View mLoginFormView;
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+
+        mLoginFormView = findViewById(R.id.login_form_edituser);
+        mProgressView = findViewById(R.id.login_progress_edituser);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 

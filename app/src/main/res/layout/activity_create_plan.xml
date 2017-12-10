@@ -7,8 +7,18 @@
     tools:context="com.example.georgios.plans.CreatePlanActivity">
 
 
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/login_progress_createplan"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        android:layout_gravity = "center"/>
+
     <ScrollView
-        android:id="@+id/login_form"
+        android:id="@+id/login_form_createplan"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="0dp"
@@ -92,6 +102,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@id/fechaini"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:layout_weight="1"
                     android:text="Define fecha de inicio"
                     android:clickable="false"/>
@@ -103,7 +115,8 @@
                     android:layout_below="@id/fecha_ini_text"
                     android:layout_weight="1"
                     android:text=""
-                    android:clickable="false"/>
+                    android:clickable="false"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -131,7 +144,10 @@
                     android:layout_below="@id/fechaini"
                     android:layout_weight="1"
                     android:text="Define fecha de finalización"
-                    android:clickable="false"/>
+                    android:clickable="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -168,7 +184,9 @@
                     android:layout_below="@id/ubicacion"
                     android:layout_weight="1"
                     android:text="Define ubicación de tu plan"
-                    android:clickable="false"/>
+                    android:clickable="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"/>
 
                 <TextView
                     android:layout_width="wrap_content"

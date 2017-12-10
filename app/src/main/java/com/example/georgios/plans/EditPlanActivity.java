@@ -1,6 +1,10 @@
 package com.example.georgios.plans;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -42,11 +46,8 @@ public class EditPlanActivity extends AppCompatActivity implements Callback<Plan
 
     private Spinner preferenciaSpinner;
     private AutoCompleteTextView mDescriptionView;
-    private AutoCompleteTextView mUbicacionView;
     private AutoCompleteTextView mNameView;
     private AutoCompleteTextView mCostoView;
-    private View mProgressView;
-    private View mLoginFormView;
     private List<NumberString> preferencias = new ArrayList<NumberString>();
 
     //datetime lines
@@ -56,7 +57,7 @@ public class EditPlanActivity extends AppCompatActivity implements Callback<Plan
     private static final String TAG_DATETIME_FRAGMENT_FIN = "TAG_DATETIME_FRAGMENT_FIN";
 
     private static final String STATE_INI_TEXTVIEW = "STATE_TEXTVIEW";
-    private TextView textViewIni, textViewFin;
+    private TextView textViewIni, textViewFin, mUbicacionView;
 
     private SwitchDateTimeDialogFragment dateTimeFragment;
 
@@ -82,6 +83,7 @@ public class EditPlanActivity extends AppCompatActivity implements Callback<Plan
 
         textViewIni = (TextView) findViewById(R.id.fecha_ini_text);
         textViewFin = (TextView) findViewById(R.id.fecha_fin_text);
+        mUbicacionView=(TextView) findViewById(R.id.ubicacion_text);
 
         preferenciaSpinner = (Spinner) findViewById(R.id.preferencia);
 
@@ -148,7 +150,7 @@ public class EditPlanActivity extends AppCompatActivity implements Callback<Plan
             @Override
             public void onNeutralButtonClick(Date date) {
                 // Optional if neutral button does'nt exists
-                textViewIni.setText("");
+                textViewIni.setText("Define fecha de inicio");
             }
         });
 
@@ -194,7 +196,7 @@ public class EditPlanActivity extends AppCompatActivity implements Callback<Plan
             @Override
             public void onNeutralButtonClick(Date date) {
                 // Optional if neutral button does'nt exists
-                textViewFin.setText("Definir Fecha de finalización");
+                textViewFin.setText("Define fecha de finalización");
             }
         });
 
@@ -305,53 +307,41 @@ public class EditPlanActivity extends AppCompatActivity implements Callback<Plan
 
         String datePost;
 
-
         mNameView.setError(null);
         mDescriptionView.setError(null);
         mCostoView.setError(null);
+        textViewIni.setError(null);
+        textViewFin.setError(null);
+        mUbicacionView.setError(null);
 
-
-        // Store values at the time of the login attempt.
-        plan.setCostoPromedio(Integer.parseInt(mCostoView.getText().toString()));
-        plan.setCreadorPlan((int)globalVariable.getUser().getIdUsuario());
-        plan.setIdPlan(globalVariable.getPlan().getIdPlan());
-        plan.setDescripcion(mDescriptionView.getText().toString());
-        plan.setDetallePreferencia(getPreferenciaSpiner(preferenciaSpinner.getSelectedItem().toString()));
-
-        Timestamp ts;
-
-        if(fechafin!=null){
-            ts = new Timestamp(fechafin.getTime());
-            datePost = changeFormat(ts.toString());
-            plan.setFechaFinal(datePost);
-        }
-        else{
-            plan.setFechaFinal(globalVariable.getPlan().getFechaFinal());
-        }
-
-        if(fechaini!=null){
-            ts=new Timestamp(fechaini.getTime());
-            datePost = changeFormat(ts.toString());
-            plan.setFechaInicio(datePost);
-        }
-        else{
-            plan.setFechaInicio(globalVariable.getPlan().getFechaInicio());
-        }
-
-        plan.setNombre(mNameView.getText().toString());
-        plan.setUbicacion(globalVariable.getPlan().getUbicacion());
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (TextUtils.isEmpty(plan.getNombre())) {
-            mNameView.setError(getString(R.string.error_invalid_password));
+        if (TextUtils.isEmpty(mNameView.getText().toString())) {
+            mNameView.setError("El nombre no puede estar vacio");
             focusView = mNameView;
             cancel = true;
-        } else if(TextUtils.isEmpty(plan.getDescripcion())){
-            mDescriptionView.setError(getString(R.string.error_confirm_password));
+        } else if(TextUtils.isEmpty(mDescriptionView.getText().toString())){
+            mDescriptionView.setError("La descripcion no puede estar vacia");
             focusView = mDescriptionView;
+            cancel = true;
+        }else if(TextUtils.isEmpty(mCostoView.getText().toString())){
+            mCostoView.setError("El costo no puede ser vacio");
+            focusView = mCostoView;
+            cancel = true;
+        }else if(textViewIni.getText().equals("Define fecha de inicio") || TextUtils.isEmpty(textViewIni.getText())){
+            textViewIni.setError("Porfavor define la fecha de inicio");
+            focusView = textViewIni;
+            cancel = true;
+        }else if(textViewFin.getText().equals("Define fecha de finalización") || TextUtils.isEmpty(textViewFin.getText())){
+            textViewFin.setError("Porfavor define la fecha de Finalización");
+            focusView = textViewFin;
+            cancel = true;
+        }else if(mUbicacionView.getText().equals("Define ubicación de tu plan")){
+            mUbicacionView.setError("Porfavor define la ubicación de tu plan");
+            focusView = mUbicacionView;
             cancel = true;
         }
 
@@ -360,8 +350,39 @@ public class EditPlanActivity extends AppCompatActivity implements Callback<Plan
             // form field with an error.
             focusView.requestFocus();
         }else{
+            plan.setIdPlan(globalVariable.getPlan().getIdPlan());
+            plan.setCostoPromedio(Integer.parseInt(mCostoView.getText().toString()));
+            plan.setCreadorPlan((int)globalVariable.getUser().getIdUsuario());
+            plan.setDescripcion(mDescriptionView.getText().toString());
+            plan.setDetallePreferencia(getPreferenciaSpiner(preferenciaSpinner.getSelectedItem().toString()));
+
+            Timestamp ts;
+            if(fechafin!=null){
+                ts = new Timestamp(fechafin.getTime());
+                datePost = changeFormat(ts.toString());
+                plan.setFechaFinal(datePost);
+            }
+            else{
+                plan.setFechaFinal(globalVariable.getPlan().getFechaFinal());
+            }
+
+
+            if(fechaini!=null){
+                ts=new Timestamp(fechaini.getTime());
+                datePost = changeFormat(ts.toString());
+                plan.setFechaInicio(datePost);
+            }
+            else{
+                plan.setFechaInicio(globalVariable.getPlan().getFechaInicio());
+            }
+
+            plan.setNombre(mNameView.getText().toString());
+            plan.setUbicacion(globalVariable.getPlan().getUbicacion());
+
             callRegisterApi(plan);
+            showProgress(true);
         }
+
 
 
     }
@@ -391,6 +412,7 @@ public class EditPlanActivity extends AppCompatActivity implements Callback<Plan
     @Override
     public void onResponse(Call<PlanEntity> call, Response<PlanEntity> response) {
 
+        showProgress(false);
         if(response.isSuccessful()){
             PlanEntity plan = response.body();
             finish();
@@ -403,6 +425,8 @@ public class EditPlanActivity extends AppCompatActivity implements Callback<Plan
 
     @Override
     public void onFailure(Call<PlanEntity> call, Throwable t) {
+        showProgress(false);
+        Toast.makeText(getApplicationContext(), "Ha ocurrido un error inesperado en el servidor",Toast.LENGTH_LONG).show();
         t.printStackTrace();
     }
 
@@ -553,5 +577,47 @@ public class EditPlanActivity extends AppCompatActivity implements Callback<Plan
             }
         }
         return hour;
+    }
+
+    private View mProgressView;
+    private View mLoginFormView;
+    /**
+     * Shows the progress UI and hides the login form.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+
+        mLoginFormView = findViewById(R.id.login_form_editplan);
+        mProgressView = findViewById(R.id.login_progress_editplan);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
     }
 }

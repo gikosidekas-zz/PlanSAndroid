@@ -13,8 +13,18 @@
         android:orientation="vertical">
 
 
+        <!-- Login progress -->
+        <ProgressBar
+            android:id="@+id/login_progress_subscribed"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"
+            android:layout_gravity = "center"/>
+
         <ListView
-            android:id="@+id/listViewRecommended"
+            android:id="@+id/listViewRecommended_subscribed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
