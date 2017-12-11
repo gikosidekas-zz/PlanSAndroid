@@ -1,12 +1,16 @@
 package com.example.georgios.plans;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -35,6 +39,7 @@ public class EditReviewPlanActivity extends AppCompatActivity {
     private TextView mplanFechaFinalText;
     private TextView mplanCostoText;
     private TextView mplanCreadorText;
+    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,7 @@ public class EditReviewPlanActivity extends AppCompatActivity {
         mplanFechaFinalText = (TextView) findViewById(R.id.planFechaFinalText);
         mplanCostoText = (TextView) findViewById(R.id.planCostoText);
         mplanCreadorText = (TextView) findViewById(R.id.planCreadorText);
+        mImageView = (ImageView) findViewById(R.id.imagen_edsubs);
 
         callgetUserbyIdApi(globalVariable.getPlan().getCreadorPlan());
 
@@ -75,6 +81,8 @@ public class EditReviewPlanActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        mImageView.setImageBitmap(dencodeImage(globalVariable.getPlan().getImagenPlan()));
 
         callAsistentesPlanApi(globalVariable.getPlan().getIdPlan());
     }
@@ -100,6 +108,18 @@ public class EditReviewPlanActivity extends AppCompatActivity {
         }catch (Exception e) {
         }
         return "";
+    }
+
+    private Bitmap dencodeImage(String str)
+    {
+        try{
+            byte [] encodeByte= Base64.decode(str,Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        }catch(Exception e){
+            e.getMessage();
+            return null;
+        }
     }
 
     public String makeNewDate(String str){
@@ -198,6 +218,18 @@ public class EditReviewPlanActivity extends AppCompatActivity {
 
     class SubscribedUsersCallBack implements Callback<List<UsuarioEntity>> {
 
+        private Bitmap dencodeImage(String str)
+        {
+            try{
+                byte [] encodeByte= Base64.decode(str,Base64.DEFAULT);
+                Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                return bitmap;
+            }catch(Exception e){
+                e.getMessage();
+                return null;
+            }
+        }
+
         @Override
         public void onResponse(Call<List<UsuarioEntity>> call, Response<List<UsuarioEntity>> response) {
             //conversion lista a array
@@ -221,6 +253,7 @@ public class EditReviewPlanActivity extends AppCompatActivity {
                 TextView location = (TextView) view.findViewById(R.id.planLocation);
                 TextView date = (TextView) view.findViewById(R.id.planDate);
                 TextView cost = (TextView) view.findViewById(R.id.planCost);
+                ImageView image = (ImageView) view.findViewById(R.id.planImage);
 
                 name.setText(singlePlan.getUsuario());
 
@@ -229,6 +262,8 @@ public class EditReviewPlanActivity extends AppCompatActivity {
                 date.setText("Apellidos: "+singlePlan.getApellidos());
 
                 cost.setText("Correo: "+singlePlan.getEmail());
+
+                image.setImageBitmap(dencodeImage(singlePlan.getFotoPerfil()));
 
                 // set item content in view
                 linearLay.addView(view);

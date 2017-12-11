@@ -17,8 +17,8 @@ public class UsuarioEntity {
     private String apellidos;
     private String usuario;
     private String tipoId;
-    private Blob fotoPerfil;
     private String numeroId;
+    private String fotoPerfil;
 
     public long getIdUsuario() {
         return idUsuario;
@@ -46,10 +46,6 @@ public class UsuarioEntity {
 
     public String getTipoId() {
         return tipoId;
-    }
-
-    public Blob getFotoPerfil() {
-        return fotoPerfil;
     }
 
     public String getNumeroId() {
@@ -84,11 +80,15 @@ public class UsuarioEntity {
         this.tipoId = tipoId;
     }
 
-    public void setFotoPerfil(Blob fotoPerfil) {
-        this.fotoPerfil = fotoPerfil;
-    }
-
     public void setNumeroId(String numeroId) {
         this.numeroId = numeroId;
+    }
+
+    public String getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(String fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
     }
 }

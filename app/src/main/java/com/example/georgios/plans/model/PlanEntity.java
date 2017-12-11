@@ -20,7 +20,7 @@ public class PlanEntity {
     private long costoPromedio;
     private long creadorPlan;
     private long detallePreferencia;
-    private Blob imagenPlan;
+    private String imagenPlan;
 
     public long getIdPlan() {
         return idPlan;
@@ -78,8 +78,12 @@ public class PlanEntity {
         this.fechaFinal = fechaFinal;
     }
 
-    public Blob getImagenPlan() {
+    public String getImagenPlan() {
         return imagenPlan;
+    }
+
+    public void setImagenPlan(String imagenPlan) {
+        this.imagenPlan = imagenPlan;
     }
 
     public void setIdPlan(long idPlan) {
@@ -110,9 +114,6 @@ public class PlanEntity {
         this.detallePreferencia = detallePreferencia;
     }
 
-    public void setImagenPlan(Blob imagenPlan) {
-        this.imagenPlan = imagenPlan;
-    }
 
 
 }

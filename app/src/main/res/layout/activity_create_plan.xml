@@ -198,6 +198,51 @@
                     android:clickable="false"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/image_layout_createplan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/imagen_label_createplan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/Subir_imagen_plan"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:clickable="false"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/imagen_label_createplan"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:clickable="false"
+                    />
+
+                <ImageView
+                    android:id="@+id/imagen_createplan"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/imagen_createplan"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:clickable="false"
+                    />
+            </LinearLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

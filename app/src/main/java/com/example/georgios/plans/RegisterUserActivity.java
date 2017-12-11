@@ -3,11 +3,21 @@ package com.example.georgios.plans;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -16,6 +26,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -24,6 +36,9 @@ import com.example.georgios.plans.model.NumberString;
 import com.example.georgios.plans.model.PreferenciaEntity;
 import com.example.georgios.plans.model.UsuarioEntity;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +58,10 @@ public class RegisterUserActivity extends AppCompatActivity implements Callback<
     private AutoCompleteTextView mNumberidView;
     private List<NumberString> preferencias = new ArrayList<NumberString>();
 
+    private Uri imageUri;
+    private ImageView mImageView;
+    private String encodedImage = "";
+
 
 
     @Override
@@ -50,7 +69,15 @@ public class RegisterUserActivity extends AppCompatActivity implements Callback<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
 
+        //Back Arrow in actionBar
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         tiposid = (Spinner)findViewById(R.id.tipoid);
+
+        mImageView = (ImageView) findViewById(R.id.imagen_registeruser);
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -76,6 +103,15 @@ public class RegisterUserActivity extends AppCompatActivity implements Callback<
         mProgressView = findViewById(R.id.login_progress);
 
         callDisplayPreferencesApi();
+
+        LinearLayout img = (LinearLayout)findViewById(R.id.image_layout_registeruser);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openGallery();
+            }
+        });
+
     }
 
     private void attemptRegister() {
@@ -100,6 +136,7 @@ public class RegisterUserActivity extends AppCompatActivity implements Callback<
         ur.setApellidos(mSecondnameView.getText().toString());
         ur.setNumeroId(mNumberidView.getText().toString());
         ur.setTipoId(tiposid.getSelectedItem().toString());
+        ur.setFotoPerfil(encodedImage);
 
         boolean cancel = false;
         View focusView = null;
@@ -155,6 +192,19 @@ public class RegisterUserActivity extends AppCompatActivity implements Callback<
 
             //mAuthTask.execute((Void) null);
         }
+    }
+
+    //For the arrow back button to function.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==android.R.id.home){
+
+            Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+            finish();
+            startActivity(intent);
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -334,5 +384,56 @@ public class RegisterUserActivity extends AppCompatActivity implements Callback<
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+    }
+
+    //Image Picker
+    private void openGallery(){
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, 100);
+    }
+
+    @Override
+    protected  void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+        if(resultCode == RESULT_OK && requestCode==100){
+            imageUri = data.getData();
+            mImageView.setImageURI(imageUri);
+            final InputStream imageStream;
+            try {
+                imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                encodedImage = encodeImage(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private String encodeImage(Bitmap bm)
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if(bm.getHeight()>1080 && bm.getWidth()>1920){
+            bm = getResizedBitmap(bm,bm.getHeight()/2,bm.getWidth()/2);
+        }
+        bm.compress(Bitmap.CompressFormat.JPEG,60,baos);
+        int co=bm.getByteCount();
+        byte[] b = baos.toByteArray();
+        String encImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+        return encImage;
+    }
+
+    public static Bitmap getResizedBitmap(Bitmap image, int newHeight, int newWidth) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // create a matrix for the manipulation
+        Matrix matrix = new Matrix();
+        // resize the bit map
+        matrix.postScale(scaleWidth, scaleHeight);
+        // recreate the new Bitmap
+        Bitmap resizedBitmap = Bitmap.createBitmap(image, 0, 0, width, height, matrix, false);
+        return resizedBitmap;
     }
 }

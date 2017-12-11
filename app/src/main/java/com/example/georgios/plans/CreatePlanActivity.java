@@ -4,12 +4,18 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +26,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -35,6 +42,11 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -79,6 +91,12 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
 
     private List<PreferenciaEntity> lpe;
 
+    private Uri imageUri;
+    private ImageView mImageView;
+    private String encodedImage = "";
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +131,14 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
         mProgressView = findViewById(R.id.login_progress);
 
         callDisplayPreferencesApi();
+
+        LinearLayout img = (LinearLayout)findViewById(R.id.image_layout_createplan);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openGallery();
+            }
+        });
 
         //Date time picker INI
         // Construct SwitchDateTimePicker
@@ -267,9 +293,50 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
 
     @Override
     protected  void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
         if (requestCode == REQUEST_CODE_PLACEPICKER && resultCode == RESULT_OK) {
             displaySelectedPlaceFromPlacePicker(data);
         }
+        if(resultCode == RESULT_OK && requestCode==100){
+            imageUri = data.getData();
+            mImageView.setImageURI(imageUri);
+            final InputStream imageStream;
+            try {
+                imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                encodedImage = encodeImage(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private String encodeImage(Bitmap bm)
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if(bm.getHeight()>1080 && bm.getWidth()>1920){
+            bm = getResizedBitmap(bm,bm.getHeight()/2,bm.getWidth()/2);
+        }
+        bm.compress(Bitmap.CompressFormat.JPEG,60,baos);
+        int co=bm.getByteCount();
+        byte[] b = baos.toByteArray();
+        String encImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+        return encImage;
+    }
+
+    public static Bitmap getResizedBitmap(Bitmap image, int newHeight, int newWidth) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // create a matrix for the manipulation
+        Matrix matrix = new Matrix();
+        // resize the bit map
+        matrix.postScale(scaleWidth, scaleHeight);
+        // recreate the new Bitmap
+        Bitmap resizedBitmap = Bitmap.createBitmap(image, 0, 0, width, height, matrix, false);
+        return resizedBitmap;
     }
 
     //For the arrow back button to function.
@@ -288,7 +355,7 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    private void attemptRegister() {
+    private void attemptRegister(){
 
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
 
@@ -343,6 +410,10 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
             plan.setCreadorPlan((int)globalVariable.getUser().getIdUsuario());
             plan.setDescripcion(mDescriptionView.getText().toString());
             plan.setDetallePreferencia(getPreferenciaSpiner(preferenciaSpinner.getSelectedItem().toString()));
+
+            if(!TextUtils.isEmpty(encodedImage)){
+                plan.setImagenPlan(encodedImage);
+            }
 
             Timestamp ts = new Timestamp(fechafin.getTime());
             datePost = changeFormat(ts.toString());
@@ -565,6 +636,14 @@ public class CreatePlanActivity extends AppCompatActivity implements Callback<Pl
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+    }
+
+
+    //Image Picker
+    private void openGallery(){
+        mImageView = (ImageView)findViewById(R.id.imagen_createplan);
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, 100);
     }
 
 }

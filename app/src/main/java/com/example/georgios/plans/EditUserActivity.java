@@ -4,13 +4,19 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +26,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -29,6 +37,9 @@ import com.example.georgios.plans.model.NumberString;
 import com.example.georgios.plans.model.PreferenciaEntity;
 import com.example.georgios.plans.model.UsuarioEntity;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +59,10 @@ public class EditUserActivity extends AppCompatActivity implements Callback<Usua
     private AutoCompleteTextView mNumberidView;
     private List<NumberString> preferencias = new ArrayList<NumberString>();
     private List<PreferenciaEntity> preferencesUser = new ArrayList<PreferenciaEntity>();
+
+    private Uri imageUri;
+    private ImageView mImageView;
+    private String encodedImage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +87,22 @@ public class EditUserActivity extends AppCompatActivity implements Callback<Usua
         mNameView = (AutoCompleteTextView) findViewById(R.id.name);
         mSecondnameView = (AutoCompleteTextView) findViewById(R.id.secondname);
         mNumberidView = (AutoCompleteTextView) findViewById(R.id.numeroid);
+        mImageView = (ImageView) findViewById(R.id.imagen_edituser);
 
         mEmailView.setText(globalVariable.getUser().getEmail());
         mUsernameView.setText(globalVariable.getUser().getUsuario());
         mNameView.setText(globalVariable.getUser().getNombres());
         mSecondnameView.setText(globalVariable.getUser().getApellidos());
         mNumberidView.setText(globalVariable.getUser().getNumeroId());
+        mImageView.setImageBitmap(dencodeImage(globalVariable.getUser().getFotoPerfil()));
+
+        LinearLayout img = (LinearLayout)findViewById(R.id.image_layout_edituser);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openGallery();
+            }
+        });
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.tiposid, android.R.layout.simple_spinner_item);
         tiposid.setAdapter(adapter);
@@ -139,6 +164,10 @@ public class EditUserActivity extends AppCompatActivity implements Callback<Usua
         ur.setTipoId(tiposid.getSelectedItem().toString());
 
         ur.setIdUsuario(globalVariable.getUser().getIdUsuario());
+
+        if(!TextUtils.isEmpty(encodedImage)){
+            ur.setFotoPerfil(encodedImage);
+        }
 
         boolean cancel = false;
         View focusView = null;
@@ -405,6 +434,69 @@ public class EditUserActivity extends AppCompatActivity implements Callback<Usua
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
+    private String encodeImage(Bitmap bm)
+    {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if(bm.getHeight()>1080 && bm.getWidth()>1920){
+            bm = getResizedBitmap(bm,bm.getHeight()/2,bm.getWidth()/2);
+        }
+        bm.compress(Bitmap.CompressFormat.JPEG,60,baos);
+        int co=bm.getByteCount();
+        byte[] b = baos.toByteArray();
+        String encImage = Base64.encodeToString(b, Base64.DEFAULT);
+
+        return encImage;
+    }
+
+    @Override
+    protected  void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+        if(resultCode == RESULT_OK && requestCode==100){
+            imageUri = data.getData();
+            mImageView.setImageURI(imageUri);
+            final InputStream imageStream;
+            try {
+                imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                encodedImage = encodeImage(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static Bitmap getResizedBitmap(Bitmap image, int newHeight, int newWidth) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // create a matrix for the manipulation
+        Matrix matrix = new Matrix();
+        // resize the bit map
+        matrix.postScale(scaleWidth, scaleHeight);
+        // recreate the new Bitmap
+        Bitmap resizedBitmap = Bitmap.createBitmap(image, 0, 0, width, height, matrix, false);
+        return resizedBitmap;
+    }
+
+    //Image Picker
+    private void openGallery(){
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, 100);
+    }
+
+    private Bitmap dencodeImage(String str)
+    {
+        try{
+            byte [] encodeByte=Base64.decode(str,Base64.DEFAULT);
+            Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        }catch(Exception e){
+            e.getMessage();
+            return null;
         }
     }
 

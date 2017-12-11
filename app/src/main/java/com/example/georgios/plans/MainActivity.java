@@ -4,13 +4,19 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.util.Base64;
 import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -22,9 +28,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.georgios.plans.api.PlanSApiAdapter;
@@ -52,9 +60,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Intent i = new Intent(getApplicationContext(),LoginActivity.class);
-        startActivity(i);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -68,6 +73,7 @@ public class MainActivity extends AppCompatActivity
         globalVariable.setUser(new UsuarioEntity());
 
         ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
     }
 
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -88,6 +94,18 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private Bitmap dencodeImage(String str)
+    {
+        try{
+            byte [] encodeByte= Base64.decode(str,Base64.DEFAULT);
+            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            return bitmap;
+        }catch(Exception e){
+            e.getMessage();
+            return null;
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -95,9 +113,27 @@ public class MainActivity extends AppCompatActivity
         final GlobalClass globalVariable = (GlobalClass) getApplicationContext();
 
         if(globalVariable.getUser().getIdUsuario()!=0){
+
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+
+            View hView =  navigationView.getHeaderView(0);
+
+            ImageView img = (ImageView) hView.findViewById(R.id.imageView_drawer);
+            img.setImageBitmap(dencodeImage(globalVariable.getUser().getFotoPerfil()));
+
+            TextView nombre_drawer = (TextView) hView.findViewById(R.id.name_drawer);
+            nombre_drawer.setText("Bienvenido, "+globalVariable.getUser().getUsuario());
+
+            TextView email_drawer = (TextView) hView.findViewById(R.id.email_drawer);
+            email_drawer.setText(globalVariable.getUser().getEmail());
+
             callRecomendPlansApi(globalVariable.getUser());
             showProgress(true);
 
+        } else{
+            Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+            startActivity(i);
         }
 
     }

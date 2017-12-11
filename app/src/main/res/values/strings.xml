@@ -36,6 +36,7 @@
     <string name="edituser_button_submit">Finalizar Edición</string>
     <string name="create_preferencias">Tus Preferencias</string>
     <string name="create_tipoid">Tipo Identificación</string>
+    <string name="Subir_imagen_usuario">Subir Foto de perfil</string>
 
     <!--Main Planes Recomendados-->
     <string name="Main_Label">Planes Recomendados</string>
@@ -70,6 +71,7 @@
     <string name="ubicacion">Ubicación</string>
     <string name="createplan_preferences">Preferencia de tu plan</string>
     <string name="editplan_button">Editar plan</string>
+    <string name="Subir_imagen_plan">Subir foto del plan</string>
 
 
     <!--Date time pickers-->
